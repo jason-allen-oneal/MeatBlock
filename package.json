@@ -1,0 +1,16 @@
+{
+  "name": "meatblock",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Keeping meat-based actors out of machine spaces since 2026.",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && node scripts/serve.mjs",
+    "build": "tsc -p tsconfig.json && node scripts/build.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "preview": "node scripts/serve.mjs",
+    "test": "npm run build && node --test tests/*.test.mjs"
+  },
+  "devDependencies": { "typescript": "5.8.3" },
+  "engines": { "node": ">=22" }
+}

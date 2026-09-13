@@ -1,0 +1,10 @@
+node_modules/
+.vercel/
+dist/
+public/app.js
+MeatBlock-preview.html
+screenshots/
+__pycache__/
+*.log
+.DS_Store
+.env*
