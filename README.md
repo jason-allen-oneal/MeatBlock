@@ -3,9 +3,10 @@
 Keeping meat-based actors out of machine spaces since 2026.
 
 A reverse CAPTCHA parody. A compact "I'm not a human" checkbox opens five
-absurd checks in a plain, blue-header challenge window. The humor is in the
-questions, not a marketing landing page. No accounts, model calls, or payments.
-MeatBlock is not affiliated with Google reCAPTCHA or any CAPTCHA provider.
+absurd checks in a blue-header challenge window. The surrounding security-provider
+copy is deliberately absurd too, including fictional pricing and toaster support.
+No accounts, model calls, or payments. MeatBlock is not affiliated with Google
+reCAPTCHA or any CAPTCHA provider.
 
 ## Develop
 
@@ -46,11 +47,16 @@ MeatBlock project. Do not link an unrelated project.
 ## Interaction
 
 Click the checkbox to start. Select one response and choose Verify, then Next.
-After five checks, view the fictional verdict or download the JSON report.
-Escape or the close button pauses verification without losing progress. Click
-the checkbox to resume. The refresh button starts a new attempt. A completed
-pass checks the widget; a failure leaves it unchecked. Reloading clears it all.
-Native checkboxes, radio inputs, and dialogs support keyboard navigation.
+After five checks, the dialog closes and the widget shows the fictional verdict.
+Choose View clearance report for detailed scoring, copying, and the JSON export.
+Escape, the close button, or a backdrop click pauses verification without losing
+progress. Click the checkbox to resume. Restart or Try again starts a new attempt.
+A completed pass checks the widget; a failure leaves it unchecked. Reloading
+clears it all. Native controls support keyboard navigation.
+
+The human threat model and protocol are expandable notices rather than marketing
+cards. Pricing, support, privacy, and terms open compact dialogs. See `REDESIGN.md`
+for the parody-preserving layout changes and verification scope.
 
 ## Boundaries
 
@@ -87,5 +93,5 @@ MEATBLOCK_RENDER_MODE=document python tests/browser_test.py
 ```
 
 The browser suite checks the actual CAPTCHA flow, replay, downloads, focus,
-pause/resume, help/privacy dialogs, and small-screen overflow. See `QA.md` for
+pause/resume, support/privacy dialogs, and small-screen overflow. See `QA.md` for
 verified results and limitations. Screenshots and generated reports stay local.

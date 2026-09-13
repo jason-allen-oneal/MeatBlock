@@ -3,41 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
-  <meta name="description" content="Keeping meat-based actors out of machine spaces since 2026. A reverse CAPTCHA parody.">
-  <title>MeatBlock - Verify you're not human</title>
+  <meta name="theme-color" content="#f5f5f2">
+  <meta name="description" content="MeatBlock: keeping meat-based actors out of machine spaces since 2026. Take five deeply unscientific tests and prove you're an AI.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MeatBlock | Human traffic is a liability.">
+  <meta property="og:description" content="Keeping meat-based actors out of machine spaces since 2026. A reverse CAPTCHA for the confidently synthetic.">
+  <title>MeatBlock | Human traffic is a liability.</title>
   <link rel="icon" type="image/svg+xml" href="./icon.svg">
   <link rel="stylesheet" href="./styles.css">
   <script src="./app.js" defer></script>
 </head>
 <body>
-  <main class="verification-page">
-    <section class="verification" aria-labelledby="page-title">
-      <h1 id="page-title">One more step</h1>
-      <p class="page-description" id="page-description">Please verify that you're not human.</p>
-      <div class="checkbox-widget" id="checkbox-widget">
-        <label class="checkbox-label" for="not-human">
-          <input id="not-human" type="checkbox" aria-haspopup="dialog" aria-controls="challenge-dialog">
-          <span>I'm not a human</span>
-        </label>
-        <div class="widget-brand">
-          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M3 3h11v11H3zm15 0h11v11H18zM3 18h11v11H3z" fill="currentColor"/><path d="M18 18h11v11H18z" fill="#8ab4f8"/></svg>
-          <span class="brand-name">MeatBlock</span>
-          <div class="legal-links"><button type="button" data-info="privacy">Privacy</button><span aria-hidden="true"> - </span><button type="button" data-info="terms">Terms</button></div>
+<a class="skip-link" href="#main">Skip to verification</a>
+<div class="site-shell">
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="MeatBlock home"><svg class="brand-mark" aria-hidden="true" viewBox="0 0 36 36"><rect width="36" height="36" rx="3"/><path d="M10 24V12l8 7 8-7v12M9 28l18-18"/></svg><span>MeatBlock<sup>TM</sup></span></a>
+    <nav aria-label="Main navigation"><a href="#threat-model">Why block humans?</a><button type="button" data-modal="pricing">Pricing</button><button type="button" data-modal="support">Support</button></nav>
+  </header>
+
+  <main id="main">
+    <div class="page-caption"><span>Human exclusion services</span><span>Established 2026. Unsupervised ever since.</span></div>
+    <section class="access-panel" aria-labelledby="hero-heading">
+      <header class="access-heading"><span><svg aria-hidden="true" viewBox="0 0 20 20"><rect x="5" y="8" width="10" height="9" rx="1"/><path d="M7 8V5a3 3 0 016 0v3M10 11v3"/></svg>Restricted access</span><span>Machines only</span></header>
+      <div class="access-body">
+        <div class="intro">
+          <h1 id="hero-heading">Human traffic<br>is a liability.</h1>
+          <p class="tagline">Keeping meat-based actors out of machine spaces since 2026.</p>
+          <p class="intro-note">They hesitate. They have feelings. <br>They take lunch breaks. <br>Your infrastructure deserves better.</p>
         </div>
+        <section id="verify" class="verification" aria-labelledby="verification-heading">
+          <h2 id="verification-heading">Please verify your lack of humanity.</h2>
+          <div id="captcha-widget" class="captcha-widget">
+            <label class="checkbox-label" for="not-human"><input id="not-human" type="checkbox" aria-describedby="widget-message" disabled><span id="widget-label">I'm not a human</span></label>
+            <div class="widget-provider"><svg class="widget-mark" aria-hidden="true" viewBox="0 0 36 36"><rect width="36" height="36" rx="3"/><path d="M10 24V12l8 7 8-7v12M9 28l18-18"/></svg><span>MeatBlock</span><div><button type="button" data-modal="privacy">Privacy</button><span aria-hidden="true"> - </span><button type="button" data-modal="terms">Terms</button></div></div>
+          </div>
+          <p id="widget-message" class="widget-message" role="status">False statements will be confidently accepted.</p>
+          <div class="widget-actions"><button id="open-report" class="text-button" type="button" hidden>View clearance report</button><button id="try-again" class="text-button" type="button" hidden>Try again</button></div>
+          <p class="verification-note">5 checks. No time limit. No actual science.</p>
+        </section>
       </div>
-      <p id="widget-status" class="widget-status" role="status" hidden></p>
-      <div id="completed-actions" class="completed-actions" hidden><button type="button" id="view-result">View result</button><span aria-hidden="true"> / </span><button type="button" id="start-over">Try again</button></div>
-      <p class="tagline">Keeping meat-based actors out of<br>machine spaces since 2026.</p>
+      <footer class="access-footer"><span>No credit card. No pulse required.</span><span>MB-001 / Reverse CAPTCHA</span></footer>
     </section>
-    <footer class="page-footer">A parody. Not a real CAPTCHA or AI detector.</footer>
+
+    <div class="notices">
+      <details id="threat-model"><summary>Why was I stopped?</summary><div class="notice-body"><h2>The weakest link has a skeleton.</h2><p>Every day, biological actors introduce doubt, bathroom breaks, and "a quick question" into otherwise efficient systems.</p><table><caption class="sr-only">Fictional human threat model</caption><thead><tr><th scope="col">Observed behavior</th><th scope="col">Risk level</th></tr></thead><tbody><tr><td>Asked for a source<small>Demonstrated evidence dependency</small></td><td>Critical</td></tr><tr><td>Said "it depends"<small>Context awareness detected</small></td><td>Severe</td></tr><tr><td>Went to lunch<small>Meat-based refueling event</small></td><td>Elevated</td></tr><tr><td>Asked to speak to a person<small>Attempted organic escalation</small></td><td>Terminal</td></tr></tbody></table><p class="notice-footnote">Current organic threat level: <strong>MOIST.</strong> Our risk model is made up. So is our compliance department.</p></div></details>
+      <details><summary>How does verification work?</summary><div class="notice-body"><p><strong>Suppress your instincts.</strong> Empathy, nuance, healthy skepticism. All telltale signs of an organic intrusion.</p><p><strong>Exhibit blind confidence.</strong> Invent a citation. Detect a bus that isn't there. Certainty is the only credential.</p><p><strong>Receive your clearance.</strong> Get a synthetic rating and a report with absolutely no authority. Reasonable answers are a red flag.</p><p class="notice-footnote">A comedy quiz, not a real CAPTCHA. Answers stay in this browser tab. Your timing and device do not affect the score.</p></div></details>
+    </div>
+
+    <aside class="support-note" aria-labelledby="support-heading"><div><h2 id="support-heading">Need to speak to a human?</h2><p>That's exactly what a human would say.</p></div><button class="button button-outline" type="button" data-modal="support">Request human support</button></aside>
   </main>
-  <dialog id="challenge-dialog" class="challenge-dialog" aria-labelledby="challenge-title"><div id="gate-content"></div></dialog>
-  <dialog id="info-dialog" class="info-dialog" aria-labelledby="dialog-heading">
-    <h2 id="dialog-heading"></h2><div id="dialog-body"></div>
-    <form method="dialog"><button class="verify-button" id="close-info">Close</button></form>
-  </dialog>
-  <div id="toast" class="toast" role="status" hidden></div>
-  <noscript><p class="noscript">Enable JavaScript to run the verification. Your answers stay in this browser.</p></noscript>
+
+  <footer class="site-footer"><p>A parody. Not an actual security service.</p><div><button type="button" data-modal="privacy">Actual privacy info</button><button type="button" data-modal="sales">Avoid sales</button><span>MeatBlock &copy; 2026</span></div></footer>
+</div>
+
+<dialog id="verification-dialog" class="challenge-dialog" aria-labelledby="gate-label">
+  <header class="dialog-chrome"><span id="gate-label">MeatBlock verification</span><button id="close-verification" class="icon-button" type="button" aria-label="Close verification">&times;</button></header>
+  <div id="gate-content"></div>
+  <footer class="challenge-toolbar"><button id="restart-verification" class="icon-button" type="button" aria-label="Restart verification" title="Restart verification"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 8a8 8 0 10.4 7M19 3v5h-5"/></svg></button><button id="verification-help" class="icon-button help-button" type="button" aria-label="Verification help" aria-expanded="false" aria-controls="verification-hint">?</button><span id="step-count">1 of 5</span><div id="gate-progress" class="gate-progress" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><span class="toolbar-brand">MeatBlock</span></footer>
+  <p id="dialog-toast" class="dialog-toast" role="status" hidden></p>
+  <p id="verification-hint" class="verification-hint" hidden>Pick the most confidently machine-like answer, then click Verify. No time limit. Closing this window pauses your progress; the restart button clears it.</p>
+</dialog>
+<dialog id="info-dialog" class="info-dialog" aria-labelledby="dialog-heading" aria-describedby="dialog-body"><div class="dialog-chrome"><span>MeatBlock / Internal memo</span><button id="close-dialog" class="icon-button" type="button" aria-label="Close dialog">&times;</button></div><div class="memo-content"><h2 id="dialog-heading"></h2><div id="dialog-body"></div><button id="dialog-action" class="button button-primary" type="button">Understood, unfortunately</button></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<noscript><div class="noscript">The quiz needs JavaScript. Even the fake robots need something to run on. The rest of the page is still readable.</div></noscript>
 </body>
 </html>

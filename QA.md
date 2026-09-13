@@ -1,25 +1,23 @@
 # CAPTCHA redesign verification
 
-## Local checks completed
+## Current local results
 
-- TypeScript 5.8.3 strict compilation and production build passed.
-- All 12 Node tests passed, including all 1,024 answer combinations.
-- All 47 Chromium document-mode checks passed.
-- Desktop, 320px, 390px, and 768px layouts completed all five checks.
-- Perfect-score and zero-score runs produced the expected results.
-- A pass checks the original widget; failure leaves it unchecked.
-- Escape closes the challenge and returns focus to the checkbox.
-- Reopening preserves the selected answer or feedback step without extra points.
-- Restart clears the prior attempt. Reload clears the entire session.
-- Native keyboard launch, arrow-key radio selection, submission, and focus work.
-- Nested Help and the Privacy/Terms dialogs close and restore focus.
-- The downloaded JSON matches the score, five answers, and satire label.
-- Clipboard-denial behavior exposes the working download alternative.
-- No horizontal overflow was observed in the page or challenge dialog.
-- No unexpected outbound requests, cookies, or JavaScript/console errors occurred.
-- Desktop checkbox, desktop challenge, mobile challenge, and result screenshots
-  were captured; desktop and mobile layouts were visually inspected.
-- A separate local HTTP request returned 200 with the configured security headers.
+The parody-preserving layout passed TypeScript 5.8.3 strict checking, the
+production build, all 12 existing engine tests, and 72 Chromium document-mode
+checks on September 13, 2026. The engine suite includes all 1,024 possible
+answer combinations. The scoring engine and runtime dependencies are unchanged.
+
+Browser coverage includes passing and failing sessions; checkbox launch;
+selection and feedback preservation on pause/resume; explicit restart; completion
+back to the widget; optional clearance reports; JSON downloads; clipboard-denial
+feedback inside the dialog; keyboard controls and background focus isolation;
+all five memo types; and disclosure navigation.
+
+The page and challenge were checked at 320, 390, 660, 768, 1024, and 1440px widths.
+Complete runs also passed at 320px, 390px, and 568x320 landscape. No JavaScript
+errors, unexpected outbound requests, or horizontal overflow appeared in these
+checks. The app added no cookies. Local HTTP serving separately returned 200
+with the configured Content Security Policy.
 
 ## Conditions and limitations
 
@@ -33,3 +31,6 @@ These tests do not verify the production origin, hosted clipboard success,
 Firefox, Safari, real mobile hardware, or an independent accessibility/security
 audit. Deployment status must be checked separately in Vercel. Browser artifacts
 are generated locally by tests/browser_test.py and are not committed.
+
+See REDESIGN.md for interaction details and reproduction commands. These results
+supersede the 47-check record for the earlier stripped-down CAPTCHA layout.
