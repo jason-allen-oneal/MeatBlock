@@ -2,44 +2,37 @@
 
 Keeping meat-based actors out of machine spaces since 2026.
 
-A satirical reverse CAPTCHA dressed up as serious security software. Five absurd
-checkpoints award a fictional synthetic score, a pass/fail verdict, and a
-clearance report with absolutely no authority.
+A reverse CAPTCHA parody. A compact "I'm not a human" checkbox opens five
+absurd checks in a plain, blue-header challenge window. The humor is in the
+questions, not a marketing landing page. No accounts, model calls, or payments.
+MeatBlock is not affiliated with Google reCAPTCHA or any CAPTCHA provider.
 
 ## Develop
 
 Requires Node.js 22 or later and npm. TypeScript 5.8.3 is the only development
-dependency. There are no runtime dependencies.
+dependency; there are no runtime dependencies.
 
 ```sh
 npm install --ignore-scripts
 npm run dev
 ```
 
-Open the localhost URL printed by the preview server, normally port 4173. This
-small project does not use hot reload: run `npm run build` after source changes,
-then refresh the page. `npm run preview` starts the server without rebuilding.
+Open the localhost URL printed by the preview server, normally port 4173.
+There is no hot reload: rebuild and refresh after editing source files.
 
 ```sh
 npm run typecheck
 npm test
 npm run build
+npm run preview
 ```
 
-## Offline preview
-
-Running `npm run build` also generates `MeatBlock-preview.html`. Open that file
-in a modern browser for a self-contained version with no server, external fonts,
-or API keys. Downloaded reports work locally. Clipboard copying depends on
-browser permissions; use the download button when clipboard access is unavailable.
-
-Generated files are not committed. The build regenerates `public/app.js`, `dist/`,
-and the standalone preview from the TypeScript and public assets.
+The build produces `dist/` for hosting and `MeatBlock-preview.html` for a
+self-contained offline preview. Generated files are not committed.
 
 ## Deploy on Vercel
 
-Import this GitHub repository into Vercel as a project named `meatblock`.
-The repository includes `vercel.json` with these settings:
+Import this repository with its root directory unchanged. `vercel.json` sets:
 
 - Framework preset: Other
 - Build command: `npm run build`
@@ -47,57 +40,52 @@ The repository includes `vercel.json` with these settings:
 - Install command: `npm install --ignore-scripts --no-fund`
 - Environment variables: none
 
-Alternatively, deploy from this directory using the Vercel CLI:
+Or run `npx vercel@latest --prod` from the project root and select the intended
+MeatBlock project. Do not link an unrelated project.
+
+## Interaction
+
+Click the checkbox to start. Select one response and choose Verify, then Next.
+After five checks, view the fictional verdict or download the JSON report.
+Escape or the close button pauses verification without losing progress. Click
+the checkbox to resume. The refresh button starts a new attempt. A completed
+pass checks the widget; a failure leaves it unchecked. Reloading clears it all.
+Native checkboxes, radio inputs, and dialogs support keyboard navigation.
+
+## Boundaries
+
+This is not authentication, bot detection, or an intelligence assessment. All
+scores are fictional and based only on selected answers, never timing or device
+characteristics. There are no real access restrictions or protected services.
+
+The app sends no answers anywhere and adds no analytics, cookies, or persistent
+storage. Downloaded reports are generated locally. Clipboard access is requested
+only by the copy button; downloading remains available when copying is denied.
+The hosting provider may process ordinary request logs.
+
+The hosted build restricts scripts and styles to its own origin and blocks
+outbound connections. The standalone build uses hashes for embedded scripts
+and styles. These restrictions are not an independent security audit.
+
+## Tests and source
+
+`src/engine.ts` contains the unchanged scoring and state machine.
+`src/app.ts` contains the checkbox, dialogs, result rendering, and exports.
+`public/` contains the HTML, CSS, and original MeatBlock mark.
+`tests/engine.test.mjs` covers all 1,024 answer combinations.
+
+With Python Playwright and Chromium installed, start the local server and run:
 
 ```sh
-npx vercel@latest --prod
-```
-
-Complete the CLI sign-in flow if requested. Select the intended Vercel team and
-create a new project or select an existing MeatBlock project. Do not link an
-unrelated project. Publishing this repository alone does not establish a live
-Vercel deployment.
-
-## Files
-
-- `src/engine.ts`: typed questions, immutable state transitions, scoring, reports.
-- `src/app.ts`: browser interactions, rendering, dialogs, clipboard and exports.
-- `public/index.html`: landing page content and semantic HTML.
-- `public/styles.css`: responsive layout, focus styles, reduced-motion handling.
-- `scripts/build.mjs`: prepares `dist/` and the standalone HTML preview.
-- `scripts/serve.mjs`: local preview server, bound to 127.0.0.1 only.
-- `tests/engine.test.mjs`: Node tests, including all 1,024 answer combinations.
-- `tests/browser_test.py`: optional Chromium checks using Python Playwright.
-- `QA.md`: verification scope and limitations from the initial build.
-
-## Behavior and boundaries
-
-Scores depend only on selected answers. Reading speed, keyboard timing, identity,
-and device characteristics do not affect scoring. There is no real bot detector,
-authentication service, model, payment flow, account system, or subscription.
-
-The app adds no analytics, browser storage, or cookies and sends no quiz answers
-to a server. Refreshing clears the session. Hosting platforms can still process
-ordinary access logs.
-
-The hosted build uses a Content Security Policy that allows its own scripts and
-styles and blocks outbound connections. The standalone HTML uses hashes for its
-embedded script and stylesheet. These are baseline browser restrictions, not a
-claim that the app has undergone an independent security audit.
-
-## Optional browser tests
-
-In a Python environment with Playwright and Chromium already installed:
-
-```sh
-# Start the app in another terminal first.
 python tests/browser_test.py
 ```
 
-For environments where browser navigation is restricted, document-rendering
-mode tests the self-contained markup without navigating to a server. It does not
-test live hosting or clipboard success on an HTTPS origin.
+When browser network navigation is restricted, test the self-contained document:
 
 ```sh
 MEATBLOCK_RENDER_MODE=document python tests/browser_test.py
 ```
+
+The browser suite checks the actual CAPTCHA flow, replay, downloads, focus,
+pause/resume, help/privacy dialogs, and small-screen overflow. See `QA.md` for
+verified results and limitations. Screenshots and generated reports stay local.
