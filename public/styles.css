@@ -1,225 +1,106 @@
 :root {
   font-family: Arial, Helvetica, sans-serif;
-  color: #272b2f;
-  background: #f5f5f2;
+  color: #202124;
+  background: #fff;
   font-synthesis: none;
   color-scheme: light;
-  --paper: #fff;
-  --ink: #272b2f;
-  --muted: #686d70;
-  --line: #d8dada;
-  --blue: #28679c;
-  --blue-dark: #1c507c;
-  --red: #a54538;
-  --green: #2d6a45;
+  --blue: #1a73e8;
+  --muted: #5f6368;
+  --border: #d3d3d3;
 }
 * { box-sizing: border-box; }
 body { margin: 0; }
 button, input { font: inherit; }
-button, a, input, summary { -webkit-tap-highlight-color: transparent; }
-button, summary { cursor: pointer; }
-button { touch-action: manipulation; }
-a { color: inherit; }
+button { cursor: pointer; }
 button:disabled { cursor: default; }
-button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+button, input, label { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, input:focus-visible { outline: 2px solid #185abc; outline-offset: 3px; }
 [hidden] { display: none !important; }
-.site-shell { max-width: 960px; padding: 0 36px; margin: 0 auto; }
-.site-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 114px; border-bottom: 1px solid var(--line); }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 25px; font-weight: 700; letter-spacing: -1px; }
-.brand sup { font-size: 8px; letter-spacing: 0; font-weight: 400; margin-left: 3px; vertical-align: super; }
-.brand-mark { width: 32px; height: 32px; }
-.brand-mark rect, .widget-mark rect { fill: var(--red); }
-.brand-mark path, .widget-mark path { fill: none; stroke: #fff; stroke-width: 2; }
-.site-header nav { display: flex; gap: 26px; align-items: center; }
-.site-header nav a, .site-header nav button, .site-footer button { font-size: 12px; text-decoration: none; color: var(--muted); background: none; border: 0; padding: 8px 0; }
-.site-header nav a:hover, .site-header nav button:hover, .site-footer button:hover { color: var(--ink); text-decoration: underline; }
-main { padding: 48px 0 0; }
-.page-caption { display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 11px; margin: 0 0 14px; }
-.access-panel { background: var(--paper); border: 1px solid #cbcece; border-top: 3px solid var(--blue); }
-.access-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 27px; border-bottom: 1px solid #e6e7e7; font-size: 12px; }
-.access-heading > span:first-child { display: flex; align-items: center; gap: 7px; }
-.access-heading > span:last-child { color: var(--muted); }
-.access-heading svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.3; fill: none; }
-.access-body { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 44px; padding: 42px 36px 44px; }
-h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 42px; line-height: 1.12; letter-spacing: -1.4px; font-weight: 400; margin: 0 0 18px; }
-.tagline { font-size: 15px; line-height: 1.6; max-width: 310px; margin: 0 0 20px; }
-.intro-note { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 0; }
-.verification { min-width: 0; }
-.verification h2 { font-size: 13px; line-height: 1.5; margin: 0 0 13px; font-weight: 400; }
-.captcha-widget { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 88px; padding: 12px 14px; border: 1px solid #bfc3c6; background: #fafafa; border-radius: 2px; box-shadow: 0 1px 2px #00000012; }
-.checkbox-label { display: flex; align-items: center; gap: 12px; font-size: 16px; cursor: pointer; min-height: 44px; flex: 1; line-height: 1.3; }
-.checkbox-label input { width: 26px; height: 26px; margin: 0; accent-color: var(--blue); cursor: pointer; flex-shrink: 0; }
-.checkbox-label input { appearance: none; display: grid; place-items: center; background: #fff; border: 2px solid #aab0b3; border-radius: 2px; }
-.checkbox-label input:checked { border-color: var(--green); }
-.checkbox-label input:checked::after { content: '✓'; color: var(--green); font-size: 22px; line-height: 1; }
-.checkbox-label input:disabled { cursor: default; }
-.widget-provider { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #535a5e; gap: 3px; flex-shrink: 0; }
-.widget-mark { width: 25px; height: 25px; }
-.widget-provider > div { font-size: 9px; }
-.widget-provider button { color: #61686d; border: 0; padding: 2px 0; background: transparent; font-size: 9px; }
-.widget-provider button:hover { text-decoration: underline; }
-.widget-message { color: var(--muted); font-size: 11px; line-height: 1.6; margin: 11px 0 0; min-height: 18px; }
-.verification-note { font-size: 10px; line-height: 1.6; color: var(--muted); margin: 21px 0 0; }
-.widget-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-.text-button { border: 0; background: transparent; padding: 9px 0; text-decoration: underline; text-underline-offset: 3px; font-size: 11px; color: var(--blue-dark); }
-.captcha-widget.verified { border-color: #8ca999; }
-.verified .checkbox-label { color: var(--green); cursor: default; }
-.verified input { accent-color: var(--green); }
-.captcha-widget.denied { border-color: #b77a72; }
-.denied .checkbox-label { color: #8e362b; }
-.access-footer { padding: 15px 27px; border-top: 1px solid #e6e7e7; display: flex; justify-content: space-between; gap: 15px; font-size: 10px; color: var(--muted); }
-.notices { margin-top: 24px; }
-.notices details { border-bottom: 1px solid var(--line); }
-.notices summary { list-style: none; display: flex; align-items: center; gap: 10px; font-size: 13px; padding: 16px 0; }
-.notices summary::-webkit-details-marker { display: none; }
-.notices summary::before { content: '+'; font-size: 17px; width: 15px; color: var(--muted); }
-.notices details[open] summary::before { content: '-'; }
-.notice-body { padding: 0 25px 20px; max-width: 740px; }
-.notice-body h2 { font-size: 18px; margin: 8px 0 12px; }
-.notice-body p { font-size: 13px; line-height: 1.75; }
-.notice-body table { width: 100%; border-collapse: collapse; margin: 20px 0; text-align: left; font-size: 12px; }
-.notice-body th { color: var(--muted); font-weight: 400; padding: 9px 0; border-bottom: 1px solid var(--line); }
-.notice-body td { padding: 12px 0; border-bottom: 1px solid #e2e4e4; vertical-align: top; }
-.notice-body td:last-child { color: #8e362b; }
-.notice-body small { display: block; color: var(--muted); font-size: 10px; margin-top: 5px; }
-.notice-body .notice-footnote { color: var(--muted); font-size: 11px; }
-.support-note { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px 0 32px; }
-.support-note h2 { font-size: 14px; margin: 0 0 7px; }
-.support-note p { font-size: 12px; color: var(--muted); margin: 0; }
-.button { display: inline-flex; justify-content: center; align-items: center; gap: 12px; border-radius: 2px; border: 1px solid transparent; min-height: 38px; padding: 10px 16px; font-size: 12px; font-weight: 600; text-decoration: none; }
-.button-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
-.button-primary:hover:not(:disabled) { background: var(--blue-dark); border-color: var(--blue-dark); }
-.button-primary:disabled { background: #e6e8e9; border-color: #d8dcdc; color: #747b80; }
-.button-outline { color: #3f474d; background: transparent; border-color: #bdc2c5; }
-.button-outline:hover { background: #eaeded; }
-.site-footer { border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; padding: 20px 0 32px; align-items: center; font-size: 10px; color: var(--muted); }
-.site-footer p { margin: 0; }
-.site-footer > div { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
-.site-footer button { font-size: 10px; }
-/* The challenge is a utility window, not a second landing page. */
-body.modal-open { overflow: hidden; }
-dialog { color: var(--ink); background: #fff; border: 1px solid #b6bdc1; border-radius: 3px; padding: 0; width: calc(100% - 28px); max-height: calc(100dvh - 28px); overflow-y: auto; overscroll-behavior: contain; box-shadow: 0 8px 35px #15212a38; }
-dialog::backdrop { background: #1c273c45; }
-.challenge-dialog { max-width: 410px; }
-.info-dialog { max-width: 460px; }
-.dialog-chrome { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 10px 4px 18px; font-size: 11px; color: var(--muted); background: #fafbfb; border-bottom: 1px solid #e2e5e6; }
-.icon-button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 36px; height: 36px; border: 0; background: transparent; font-size: 23px; line-height: 1; color: #697176; border-radius: 2px; }
-.icon-button:hover { background: #e9edef; color: var(--ink); }
-.icon-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; }
-.challenge-banner { background: var(--blue); color: #fff; padding: 20px 22px; }
-.step-label { font-size: 10px; margin: 0 0 9px; }
-.challenge-title { margin: 0; font-size: 23px; line-height: 1.15; font-weight: 600; }
+.verification-page { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 72px 16px 100px; position: relative; }
+.verification { width: 304px; max-width: 100%; text-align: center; }
+h1 { font-size: 22px; font-weight: 400; line-height: 1.3; margin: 0 0 10px; }
+.page-description { font-size: 14px; line-height: 1.5; margin: 0 0 27px; color: var(--muted); }
+.checkbox-widget { display: flex; align-items: center; justify-content: space-between; min-height: 78px; padding: 10px 11px 9px 12px; background: #fafafa; border: 1px solid var(--border); border-radius: 3px; box-shadow: 0 1px 3px #00000014; text-align: left; }
+.checkbox-label { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 14px; cursor: pointer; white-space: nowrap; }
+.checkbox-label input { appearance: none; -webkit-appearance: none; width: 28px; height: 28px; flex: 0 0 28px; margin: 0; background: #fff; border: 2px solid #737373; border-radius: 2px; cursor: pointer; }
+.checkbox-label input:hover { border-color: #444; }
+.checkbox-label input:checked { border: 0; background: none; position: relative; }
+.checkbox-label input:checked::after { content: ''; display: block; width: 13px; height: 24px; border: solid #188038; border-width: 0 4px 4px 0; transform: translate(7px, -1px) rotate(45deg); }
+.widget-brand { width: 62px; flex: 0 0 62px; text-align: center; color: var(--blue); }
+.brand-mark { width: 28px; height: 28px; display: block; margin: 0 auto 3px; }
+.brand-name { display: block; color: #555; font-size: 10px; line-height: 13px; }
+.legal-links { color: #555; font-size: 9px; white-space: nowrap; line-height: 14px; }
+.legal-links button { border: 0; background: none; padding: 0; color: inherit; font-size: inherit; }
+.legal-links button:hover, .text-button:hover, .completed-actions button:hover { text-decoration: underline; }
+.tagline { margin: 23px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.page-footer { position: absolute; bottom: 25px; left: 16px; right: 16px; font-size: 11px; color: var(--muted); text-align: center; line-height: 1.5; }
+.widget-status { margin: 12px 0 0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.completed-actions { margin-top: 6px; color: #dadce0; font-size: 12px; }
+.completed-actions button, .text-button { border: 0; background: none; padding: 6px 4px; color: #185abc; font-size: 13px; }
+.challenge-dialog { width: 400px; max-width: calc(100vw - 24px); max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); padding: 0; border: 1px solid #bdbdbd; border-radius: 0; background: #fff; color: #202124; box-shadow: 0 2px 10px #00000033; overflow-y: auto; overscroll-behavior: contain; }
+.challenge-dialog::backdrop { background: #ffffffb3; }
+.challenge-header { padding: 22px 22px 17px; background: var(--blue); color: #fff; margin: 7px 7px 0; }
+.header-instruction { margin: 0 0 4px; font-size: 14px; line-height: 1.45; }
+.challenge-header h2 { margin: 0; font-size: 25px; line-height: 1.2; font-weight: 700; }
+.step-label { margin: 11px 0 0; font-size: 12px; line-height: 1.4; }
 [data-focus]:focus { outline: none; }
-.challenge-body { padding: 20px 20px 0; }
-.challenge-prompt { font-size: 16px; line-height: 1.5; margin: 0 0 7px; }
-.challenge-note { font-size: 11px; line-height: 1.6; color: var(--muted); margin: 0 0 17px; }
-.answers { border: 0; padding: 0; margin: 0; display: grid; gap: 6px; }
-.answer { display: flex; align-items: flex-start; gap: 10px; padding: 12px; border: 1px solid #d8dde0; background: #fafbfb; cursor: pointer; font-size: 12px; line-height: 1.55; min-height: 44px; }
-.answer:hover:not(.disabled-answer) { border-color: #819db3; }
-.answer:has(input:checked) { background: #eff5fa; border-color: var(--blue); }
-.answer input { width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--blue); margin: 2px 0 0; }
-.disabled-answer { cursor: default; }
-.answer.correct-answer { background: #f0f6f2; border-color: #6c957b; }
-.challenge-actions { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding: 17px 0; }
-.challenge-actions > span { font-size: 10px; color: var(--muted); margin-right: auto; }
-.challenge-actions .button { min-width: 94px; }
-.latent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin: 0 0 16px; }
-.latent-grid span { display: flex; align-items: flex-end; justify-content: flex-end; aspect-ratio: 1.5; padding: 7px; font-size: 10px; color: #737d85; background: #e9edf0; border: 1px solid #d8dfe3; }
-.feedback { border-left: 3px solid #a55543; background: #faf3ef; margin: 14px 0 0; padding: 11px 12px; }
-.feedback h4 { font-size: 10px; margin: 0 0 7px; line-height: 1.4; color: #86452e; }
-.feedback p { font-size: 12px; line-height: 1.6; margin: 0; }
-.feedback-positive { border-color: #639174; background: #f1f6f2; }
-.feedback-positive h4 { color: #386049; }
-.challenge-toolbar { display: flex; gap: 4px; align-items: center; padding: 6px 13px; border-top: 1px solid #dde2e5; }
-.help-button { font-size: 18px; }
-#step-count { font-size: 10px; color: var(--muted); margin: 0 9px 0 5px; }
-.gate-progress { display: flex; gap: 3px; }
-.gate-progress span { width: 8px; height: 8px; border: 1px solid #bdc7cf; }
-.gate-progress .current { border-color: var(--blue); }
-.gate-progress .completed { background: var(--blue); border-color: var(--blue); }
-.toolbar-brand { margin-left: auto; font-size: 11px; color: var(--muted); }
-.verification-hint { margin: 0; padding: 12px 20px; font-size: 12px; line-height: 1.6; background: #f0f4f7; border-top: 1px solid #dbe2e7; }
-.result { padding: 25px 24px; }
-.result-verdict { display: inline-block; border: 1px solid #769982; padding: 7px 10px; font-size: 12px; font-weight: 700; color: var(--green); }
-.result-score { display: flex; gap: 10px; align-items: baseline; margin: 24px 0 12px; }
-.result-score strong { font-size: 42px; font-weight: 400; letter-spacing: -1.5px; }
-.result-score > span { font-size: 10px; color: var(--muted); }
-.result-rating { font-size: 20px; margin: 0 0 8px; }
-.result-message { font-size: 12px; line-height: 1.7; color: var(--muted); margin: 0 0 20px; }
-.result-metrics { display: grid; gap: 12px; }
-.result-metric-label { display: flex; justify-content: space-between; gap: 16px; font-size: 11px; }
-.result progress { width: 100%; height: 4px; appearance: none; border: 0; background: #e7ebee; }
-.result progress::-webkit-progress-bar { background: #e7ebee; }
-.result progress::-webkit-progress-value { background: var(--blue); }
-.result progress::-moz-progress-bar { background: var(--blue); }
-.result-satire { font-size: 9px; line-height: 1.8; color: var(--muted); margin: 20px 0; }
-.result-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.result-actions .button { flex: 1; font-size: 11px; }
-.retest-link { border: 0; background: none; color: var(--blue-dark); padding: 14px 0 0; font-size: 11px; text-decoration: underline; }
-.result-failed .result-verdict { border-color: #af746b; color: #8e362b; }
-.memo-content { padding: 25px; }
-.memo-content h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 25px; font-weight: 400; margin: 0 0 18px; line-height: 1.3; }
-.memo-content p { font-size: 13px; line-height: 1.8; color: #51595e; }
-.memo-content .button { margin-top: 15px; }
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); width: max-content; padding: 13px 18px; border: 1px solid #bcc8cf; background: #fff; color: #334956; box-shadow: 0 2px 8px #00000015; font-size: 12px; line-height: 1.5; z-index: 5; }
-body:has(dialog[open]) > .toast { display: none; }
-.dialog-toast { margin: 0; padding: 12px 20px; background: #eff4f7; color: #334956; font-size: 12px; line-height: 1.5; border-top: 1px solid #d5dfe6; }
-.skip-link { position: absolute; top: -60px; left: 20px; padding: 12px; background: var(--blue); color: #fff; z-index: 6; }
-.skip-link:focus { top: 12px; }
-.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-.noscript { padding: 20px; text-align: center; font-size: 13px; color: #86452e; }
-@media (max-width: 850px) {
-  .site-shell { padding: 0 26px; }
-  .access-body { gap: 30px; padding: 32px 26px; }
-  h1 { font-size: 36px; }
-  .checkbox-label { font-size: 14px; gap: 10px; }
-  .captcha-widget { padding: 12px 10px; }
-  .site-footer { align-items: flex-start; flex-direction: column; gap: 8px; }
+.challenge-body { padding: 19px 16px 12px; }
+.challenge-prompt { margin: 0 5px 12px; font-size: 16px; line-height: 1.5; }
+.challenge-note { margin: 0 5px 15px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.answers { border: 0; padding: 0; margin: 0; min-width: 0; }
+.answer { display: flex; align-items: flex-start; gap: 11px; padding: 12px 8px; font-size: 14px; line-height: 1.45; border-bottom: 1px solid #e8eaed; cursor: pointer; }
+.answer:first-of-type { border-top: 1px solid #e8eaed; }
+.answer:hover { background: #f8f9fa; }
+.answer:has(input:checked) { background: #e8f0fe; }
+.answer input { width: 17px; height: 17px; flex: 0 0 17px; margin: 1px 0 0; accent-color: var(--blue); cursor: pointer; }
+.answer:has(input:disabled) { cursor: default; }
+.answer input:disabled { cursor: default; }
+.latent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin: 0 5px 15px; }
+.latent-grid span { display: grid; place-items: center; height: 42px; background: #f1f3f4; color: #80868b; font-size: 11px; }
+.feedback { margin: 13px 5px 1px; font-size: 13px; line-height: 1.5; color: #b3261e; }
+.feedback.positive { color: #137333; }
+.feedback p { margin: 4px 0 0; color: #45484d; }
+.challenge-footer { border-top: 1px solid #dfdfdf; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; }
+.tools { display: flex; gap: 2px; }
+.tool-button { width: 36px; height: 36px; display: grid; place-items: center; border: 0; border-radius: 2px; background: none; color: #5f6368; }
+.tool-button:hover { background: #f1f3f4; color: #202124; }
+.tool-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.verify-button { border: 1px solid var(--blue); background: var(--blue); color: #fff; border-radius: 2px; padding: 11px 22px; min-height: 40px; min-width: 100px; font-size: 13px; font-weight: 600; text-align: center; }
+.verify-button:hover { background: #1765cc; border-color: #1765cc; }
+.verify-button:disabled { background: #f1f3f4; border-color: #dadce0; color: #747474; }
+.result-title { display: flex; align-items: center; gap: 10px; margin: 4px 5px 14px; font-size: 17px; font-weight: 400; }
+.result-mark { color: #188038; font-size: 24px; }
+.result-mark.denied { color: #b3261e; }
+.result-message { font-size: 14px; line-height: 1.55; margin: 0 5px 20px; }
+.result-details { margin: 0 5px 12px; font-size: 13px; }
+.result-details div { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid #e8eaed; padding: 11px 0; }
+.result-details dt { color: var(--muted); }
+.result-details dd { margin: 0; text-align: right; }
+.result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 1px; }
+.result-disclaimer { font-size: 11px; line-height: 1.5; color: var(--muted); margin: 15px 5px 4px; }
+.info-dialog { padding: 24px; width: 400px; max-width: calc(100vw - 32px); max-height: calc(100dvh - 32px); border: 1px solid var(--border); border-radius: 3px; box-shadow: 0 3px 20px #00000026; color: #202124; }
+.info-dialog::backdrop { background: #00000033; }
+.info-dialog h2 { font-size: 20px; line-height: 1.3; font-weight: 400; margin: 0 0 14px; }
+.info-dialog p { font-size: 14px; line-height: 1.6; margin: 0 0 14px; }
+.info-dialog form { text-align: right; margin-top: 20px; }
+.toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100vw - 32px); padding: 12px 16px; border: 1px solid var(--border); background: #fff; color: #202124; font-size: 13px; line-height: 1.5; box-shadow: 0 2px 8px #0000001a; z-index: 5; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.noscript { position: fixed; bottom: 60px; padding: 15px; font-size: 13px; color: #b3261e; text-align: center; width: 100%; background: #fff; }
+@media (max-width: 420px) {
+  .challenge-header { padding: 18px 17px 16px; }
+  .challenge-header h2 { font-size: 23px; }
+  .challenge-body { padding: 15px 12px 12px; }
+  .challenge-footer { padding: 10px 12px; }
+  .answer { padding: 11px 6px; }
 }
-@media (max-width: 660px) {
-  .site-shell { padding: 0 20px; max-width: 480px; }
-  .site-header { min-height: 85px; gap: 12px; }
-  .brand { font-size: 22px; gap: 8px; }
-  .brand-mark { width: 28px; height: 28px; }
-  .site-header nav { gap: 17px; }
-  .site-header nav a { display: none; }
-  .site-header nav button { font-size: 11px; }
-  main { padding-top: 26px; }
-  .page-caption { font-size: 10px; }
-  .page-caption > span:last-child { display: none; }
-  .access-heading { padding: 13px 19px; font-size: 11px; }
-  .access-body { grid-template-columns: 1fr; padding: 27px 22px 25px; gap: 29px; }
-  h1 { font-size: 36px; margin-bottom: 14px; }
-  .tagline { font-size: 14px; margin-bottom: 14px; }
-  .intro-note { font-size: 11px; }
-  .intro-note br { display: none; }
-  .intro-note br::after { content: ' '; }
-  .captcha-widget { padding: 12px; }
-  .checkbox-label { font-size: 15px; }
-  .verification-note { margin-top: 15px; }
-  .access-footer { padding: 13px 19px; font-size: 9px; }
-  .access-footer > span:last-child { display: none; }
-  .notices { margin-top: 16px; }
-  .support-note { align-items: flex-start; flex-direction: column; gap: 15px; padding: 24px 0; }
-  .support-note .button { font-size: 11px; }
-  .site-footer { padding-bottom: 24px; line-height: 1.6; }
-  .site-footer > div { gap: 15px; }
-  .notice-body { padding-left: 0; padding-right: 0; }
-}
-@media (max-width: 360px) {
-  .site-shell { padding: 0 14px; }
-  .access-body { padding-left: 17px; padding-right: 17px; }
-  .checkbox-label { font-size: 13px; gap: 8px; }
-  .captcha-widget { padding: 10px; }
-  .widget-provider { font-size: 10px; }
-  .challenge-body { padding: 16px 15px 0; }
-  .challenge-banner { padding: 18px; }
-  .challenge-title { font-size: 21px; }
-  .answer { font-size: 11px; }
-  .challenge-toolbar { padding: 6px 8px; }
-  #step-count { margin-right: 5px; }
-  .toolbar-brand { font-size: 10px; }
+@media (forced-colors: active) {
+  .checkbox-label input { appearance: auto; }
+  .checkbox-label input:checked::after { content: none; }
+  .challenge-header, .verify-button { border: 1px solid ButtonText; }
+  .brand-mark { color: CanvasText; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
 }
+
+.auto-progress { color: var(--muted); font-size: 12px; line-height: 1.5; padding: 0 8px; }

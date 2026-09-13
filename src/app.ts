@@ -1,107 +1,104 @@
 namespace MeatBlockUI {
   let session = MeatBlock.initialSession();
   let toastTimer: number | undefined;
+  let advanceTimer: number | undefined;
+  const FEEDBACK_DELAY_MS = 2000;
 
   function required<T extends HTMLElement>(id: string): T {
     const element = document.getElementById(id);
     if (!element) throw new Error(`Required interface element missing: ${id}`);
     return element as T;
   }
-  // Only app-owned copy is rendered as markup. Keep user data out of HTML sinks.
   function escapeHTML(value: string): string {
     return value.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch] ?? ch));
   }
   function focusHeading(): void {
-    required('gate-content').querySelector<HTMLElement>('[data-focus]')?.focus();
+    required('gate-content').querySelector<HTMLElement>('[data-focus]')?.focus({ preventScroll: true });
   }
-  function syncModalState(): void {
-    document.body.classList.toggle('modal-open', document.querySelector('dialog[open]') !== null);
+  function cancelAdvance(): void {
+    if (advanceTimer !== undefined) window.clearTimeout(advanceTimer);
+    advanceTimer = undefined;
   }
-  function renderProgress(): void {
-    required('gate-progress').querySelectorAll('span').forEach((segment, i) => {
-      segment.className = i < session.answers.length ? 'completed' : session.phase !== 'complete' && i === session.index ? 'current' : '';
-    });
-    required('step-count').textContent = session.phase === 'complete' ? 'Complete' : `${session.index + 1} of ${MeatBlock.challenges.length}`;
+  function canAdvance(): boolean {
+    return session.phase === 'feedback'
+      && required<HTMLDialogElement>('challenge-dialog').open
+      && !required<HTMLDialogElement>('info-dialog').open
+      && !document.hidden;
+  }
+  function scheduleAdvance(): void {
+    cancelAdvance();
+    if (!canAdvance()) return;
+    // Capture the immutable session so an old callback cannot skip a new step
+    // or act on a restarted attempt. Resuming always gives a full reading pause.
+    const pendingSession = session;
+    advanceTimer = window.setTimeout(() => {
+      advanceTimer = undefined;
+      if (session !== pendingSession || !canAdvance()) return;
+      session = MeatBlock.transition(session, { type: 'next' });
+      renderGate();
+      required('challenge-dialog').scrollTop = 0;
+      focusHeading();
+    }, FEEDBACK_DELAY_MS);
+  }
+  const headers = [
+    ['Select the response that sounds', 'artificial'],
+    ['Select the most convincing', 'made-up citation'],
+    ['Select the response with', 'unsupported confidence'],
+    ['Select all squares with', 'buses'],
+    ['Select the response with', 'no human empathy']
+  ] as const;
+  const icons = {
+    refresh: '<path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.5-1L20 9M4 15l2.4 3A7 7 0 0 0 18 17"/>',
+    help: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',
+    close: '<path d="m6 6 12 12M6 18 18 6"/>'
+  };
+  function tool(action: string, label: string, icon: keyof typeof icons): string {
+    return `<button type="button" class="tool-button" data-action="${action}" aria-label="${label}" title="${label}"><svg viewBox="0 0 24 24" aria-hidden="true">${icons[icon]}</svg></button>`;
+  }
+  function footer(button: string): string {
+    return `<div class="challenge-footer"><div class="tools">${tool('reset', 'Restart verification', 'refresh')}${tool('help', 'Help', 'help')}${tool('close', 'Close verification', 'close')}</div>${button}</div>`;
   }
   function syncWidget(): void {
     const complete = session.phase === 'complete';
-    const active = session.phase === 'challenge' || session.phase === 'feedback';
     const passed = complete && MeatBlock.pointsFor(session.answers) >= 60;
-    const paused = active && !required<HTMLDialogElement>('verification-dialog').open;
-    const input = required<HTMLInputElement>('not-human');
-    input.checked = passed;
-    input.disabled = passed;
-    required('captcha-widget').className = `captcha-widget${complete ? passed ? ' verified' : ' denied' : ''}`;
-    required('widget-label').textContent = complete ? passed ? 'Verified synthetic' : 'Human detected' : active ? paused ? 'Resume verification' : 'Verifying...' : "I'm not a human";
-    required('widget-message').textContent = complete
-      ? passed ? 'Access granted. Please leave your feelings at the door.' : 'Access denied. Please take your skeleton elsewhere.'
-      : active ? paused ? 'Verification paused. Your questionable progress is saved in this tab.' : 'Verification in progress. Common sense is not required.' : 'False statements will be confidently accepted.';
-    required('open-report').hidden = !complete;
-    required('try-again').hidden = !complete;
-  }
-  function openVerification(): void {
-    const dialog = required<HTMLDialogElement>('verification-dialog');
-    required('dialog-toast').hidden = true;
-    if (!dialog.open) dialog.showModal();
-    syncModalState();
-    syncWidget();
-    dialog.scrollTop = 0;
-    focusHeading();
-  }
-  function start(): void {
-    // Resuming keeps the selected answer and score. Explicit restart clears them.
-    session = MeatBlock.transition(session, { type: 'start' });
-    renderGate();
-    syncWidget();
-    openVerification();
-  }
-  function restart(): void {
-    session = MeatBlock.transition(session, { type: 'reset' });
-    required('verification-hint').hidden = true;
-    required('verification-help').setAttribute('aria-expanded', 'false');
-    start();
+    required<HTMLInputElement>('not-human').checked = passed;
+    required('page-title').textContent = complete ? passed ? 'Verification complete' : 'Unable to verify' : 'One more step';
+    required('page-description').textContent = complete ? passed ? 'Synthetic access granted.' : 'Human behavior was detected.' : "Please verify that you're not human.";
+    const status = required('widget-status');
+    status.hidden = session.phase === 'idle' || complete;
+    status.textContent = 'Verification in progress. Click the checkbox to resume.';
+    required('completed-actions').hidden = !complete;
   }
   function renderChallenge(): string {
     const challenge = MeatBlock.challenges[session.index];
-    if (!challenge) throw new Error('Invalid challenge index.');
+    const heading = headers[session.index];
+    if (!challenge || !heading) throw new Error('Invalid challenge index.');
     const feedback = session.phase === 'feedback';
-    const choice = session.selected === null ? undefined : challenge.options[session.selected];
+    const choice = challenge.options[session.selected ?? -1];
     const positive = choice?.points === 20;
-    const options = challenge.options.map((option, index) => {
-      const selected = session.selected === index;
-      return `<label class="answer${feedback ? ' disabled-answer' : ''}${feedback && selected && positive ? ' correct-answer' : ''}">
-        <input type="radio" name="answer" value="${index}" ${selected ? 'checked' : ''} ${feedback ? 'disabled' : ''} required>
-        <span>${escapeHTML(option.label)}</span>
-      </label>`;
-    }).join('');
-    return `<div class="challenge-banner"><p class="step-label">CHECKPOINT ${String(session.index + 1).padStart(2, '0')} / 05</p>
-      <h2 class="challenge-title" id="challenge-title" tabindex="-1" ${!feedback ? 'data-focus' : ''}>${escapeHTML(challenge.title)}</h2></div>
-      <div class="challenge-body"><p class="challenge-prompt" id="challenge-prompt">${escapeHTML(challenge.prompt)}</p>
-      <p class="challenge-note" id="challenge-note">${escapeHTML(challenge.note)}</p>
-      ${challenge.grid ? `<div class="latent-grid" aria-hidden="true">${Array.from({length: 9}, (_, i) => `<span>${String(i + 1).padStart(2, '0')}</span>`).join('')}</div>` : ''}
-      <form id="challenge-form"><fieldset class="answers" aria-describedby="challenge-note"><legend class="sr-only">${escapeHTML(challenge.prompt)}</legend>${options}</fieldset>
-      ${feedback ? `<div class="feedback${positive ? ' feedback-positive' : ''}"><h4 data-focus tabindex="-1">${positive ? 'SYNTHETIC BEHAVIOR CONFIRMED' : 'ORGANIC RESIDUE DETECTED'} / +${choice?.points ?? 0}</h4><p>${escapeHTML(choice?.feedback ?? '')}</p></div>
-        <div class="challenge-actions"><span>Evidence remains optional.</span><button id="next-check" class="button button-primary" type="button">${session.index === MeatBlock.challenges.length - 1 ? 'Finish verification' : 'Next'}</button></div>`
-        : `<div class="challenge-actions"><span>Select one response.</span><button id="submit-answer" class="button button-primary" type="submit" ${session.selected === null ? 'disabled' : ''}>Verify</button></div>`}
-      </form></div>`;
+    const options = challenge.options.map((option, index) => `<label class="answer"><input type="radio" name="answer" value="${index}" ${session.selected === index ? 'checked' : ''} ${feedback ? 'disabled' : ''} required><span>${escapeHTML(option.label)}</span></label>`).join('');
+    const action = feedback
+      ? `<span class="auto-progress">${session.index === MeatBlock.challenges.length - 1 ? 'Finishing verification...' : 'Continuing...'}</span>`
+      : '<button id="submit-answer" class="verify-button" type="submit" form="challenge-form" disabled>VERIFY</button>';
+    return `<div class="challenge-header"><p class="header-instruction">${heading[0]}</p><h2 id="challenge-title" tabindex="-1" ${feedback ? '' : 'data-focus'}>${heading[1]}</h2><p class="step-label">Step ${session.index + 1} of ${MeatBlock.challenges.length}</p></div>
+      <div class="challenge-body"><p class="challenge-prompt">${escapeHTML(challenge.prompt)}</p><p class="challenge-note" id="challenge-note">${escapeHTML(challenge.note)}</p>
+      ${challenge.grid ? '<div class="latent-grid" aria-hidden="true">' + Array.from({ length: 9 }, (_, i) => `<span>${i + 1}</span>`).join('') + '</div>' : ''}
+      <form id="challenge-form"><fieldset class="answers" aria-describedby="challenge-note"><legend class="sr-only">${escapeHTML(challenge.prompt)}</legend>${options}</fieldset></form>
+      ${feedback ? `<div class="feedback${positive ? ' positive' : ''}" tabindex="-1" data-focus><strong>${positive ? 'Synthetic response accepted.' : 'Human behavior detected.'}</strong><p>${escapeHTML(choice?.feedback ?? '')}</p></div>` : ''}</div>${footer(action)}`;
   }
   function renderResult(): string {
     const report = MeatBlock.createReport(session.answers);
     const passed = report.score >= 60;
-    return `<div class="result${passed ? '' : ' result-failed'}">
-      <div class="result-verdict"><span aria-hidden="true">${passed ? '✓' : '×'}</span> ${report.verdict}</div>
-      <div class="result-score"><strong>${report.score}</strong><span>/ 100 SYNTHETIC</span></div>
-      <h3 class="result-rating" data-focus tabindex="-1">${escapeHTML(report.rating)}</h3>
-      <p class="result-message">${report.score === 100 ? 'Flawless confidence. Questionable relationship with reality. You will fit right in.' : passed ? 'Sufficiently synthetic. A few traces of humanity remain, but we can ignore those at scale.' : 'Excessive reason, empathy, or source-checking detected. Please take your skeleton elsewhere.'}</p>
-      <div class="result-metrics">${report.metrics.map((metric, i) => `<div><label for="metric-${i}" class="result-metric-label"><span>${escapeHTML(metric.label)}</span><span>${metric.value}%</span></label><progress id="metric-${i}" max="100" value="${metric.value}">${metric.value}%</progress></div>`).join('')}</div>
-      <p class="result-satire">ORGANIC RISK: ${report.organicRisk}% &nbsp;/&nbsp; LEGAL AUTHORITY: NONE<br>Fictional scores. Not a real identity or intelligence assessment.</p>
-      <div class="result-actions"><button id="download-report" class="button button-primary" type="button">Download report <span aria-hidden="true">↓</span></button><button id="copy-clearance" class="button button-outline" type="button">Copy clearance <span aria-hidden="true">↗</span></button></div>
-      <button id="retest" class="retest-link" type="button">Retest entity. Deny everything.</button>
-    </div>`;
+    return `<div class="challenge-header"><p class="header-instruction">Verification complete</p><h2 id="challenge-title" tabindex="-1" data-focus>${passed ? 'Machine verified' : 'Human detected'}</h2><p class="step-label">5 of 5 checks completed</p></div>
+      <div class="challenge-body"><h3 class="result-title"><span class="result-mark${passed ? '' : ' denied'}" aria-hidden="true">${passed ? '✓' : '×'}</span>${passed ? 'Access granted' : 'Access denied'}</h3>
+      <p class="result-message">${passed ? 'No significant signs of humanity. You may proceed.' : 'Reason, empathy, or source-checking detected. Please try being less human.'}</p>
+      <dl class="result-details"><div><dt>Synthetic confidence</dt><dd>${report.score}%</dd></div><div><dt>Classification</dt><dd>${escapeHTML(report.rating)}</dd></div></dl>
+      <div class="result-actions"><button id="download-report" class="text-button" type="button">Download report</button><button id="copy-clearance" class="text-button" type="button">Copy result</button></div><p class="result-disclaimer">Fictional score. Not valid as proof of anything.</p></div>${footer('<button type="button" class="verify-button" data-action="close">CLOSE</button>')}`;
   }
   function renderGate(): void {
+    cancelAdvance();
     required('gate-content').innerHTML = session.phase === 'complete' ? renderResult() : renderChallenge();
-    renderProgress();
+    syncWidget();
     if (session.phase === 'challenge') {
       const form = required<HTMLFormElement>('challenge-form');
       form.addEventListener('change', event => {
@@ -110,6 +107,8 @@ namespace MeatBlockUI {
         session = MeatBlock.transition(session, { type: 'select', index: Number(target.value) });
         required<HTMLButtonElement>('submit-answer').disabled = session.selected === null;
       });
+      // Selection survives closing and reopening a partly completed challenge.
+      required<HTMLButtonElement>('submit-answer').disabled = session.selected === null;
       form.addEventListener('submit', event => {
         event.preventDefault();
         const next = MeatBlock.transition(session, { type: 'submit' });
@@ -120,38 +119,40 @@ namespace MeatBlockUI {
       });
     } else if (session.phase === 'feedback') {
       required('challenge-form').addEventListener('submit', event => event.preventDefault());
-      required('next-check').addEventListener('click', () => {
-        session = MeatBlock.transition(session, { type: 'next' });
-        renderGate();
-        syncWidget();
-        if (session.phase === 'complete') {
-          required<HTMLDialogElement>('verification-dialog').close();
-          required('open-report').focus();
-        } else {
-          required('verification-dialog').scrollTop = 0;
-          focusHeading();
-        }
-      });
+      scheduleAdvance();
     } else if (session.phase === 'complete') {
       required('download-report').addEventListener('click', downloadReport);
       required('copy-clearance').addEventListener('click', () => { void copyClearance(); });
-      required('retest').addEventListener('click', restart);
     }
   }
+  function openGate(): void {
+    if (session.phase === 'idle') session = MeatBlock.transition(session, { type: 'start' });
+    renderGate();
+    const dialog = required<HTMLDialogElement>('challenge-dialog');
+    if (!dialog.open) dialog.showModal();
+    dialog.scrollTop = 0;
+    focusHeading();
+    scheduleAdvance();
+  }
+  function restart(): void {
+    cancelAdvance();
+    session = MeatBlock.transition(session, { type: 'reset' });
+    openGate();
+  }
   function showToast(message: string): void {
+    const toast = required('toast');
     if (toastTimer !== undefined) window.clearTimeout(toastTimer);
-    required('toast').hidden = true;
-    required('dialog-toast').hidden = true;
-    const toast = required(required<HTMLDialogElement>('verification-dialog').open ? 'dialog-toast' : 'toast');
     toast.textContent = message;
     toast.hidden = false;
     toastTimer = window.setTimeout(() => { toast.hidden = true; }, 5000);
+    // A live message inside the top-layer dialog remains visible and announced.
+    const dialog = required<HTMLDialogElement>('challenge-dialog');
+    (dialog.open ? dialog : document.body).append(toast);
   }
   function downloadReport(): void {
     if (session.phase !== 'complete') return;
     const report = MeatBlock.createReport(session.answers);
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json;charset=utf-8' }));
     const link = document.createElement('a');
     link.href = url;
     link.download = `meatblock-clearance-${report.score}.json`;
@@ -159,84 +160,62 @@ namespace MeatBlockUI {
     link.click();
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast('Clearance exported. Recognized by absolutely no one.');
+    showToast('Report downloaded. Recognized by no one.');
   }
   async function copyClearance(): Promise<void> {
     if (session.phase !== 'complete') return;
     const report = MeatBlock.createReport(session.answers);
-    const text = `MEATBLOCK / SYNTHETIC CLEARANCE\n${report.verdict}\n${report.rating}: ${report.score}/100 synthetic\nOrganic risk: ${report.organicRisk}%\nKeeping meat-based actors out of machine spaces since 2026.\nSatire. Not an actual security assessment.`;
+    const text = `MeatBlock: ${report.verdict}\n${report.rating}. ${report.score}% synthetic.\nKeeping meat-based actors out of machine spaces since 2026.\nSatire. Not an actual security assessment.`;
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable.');
       await navigator.clipboard.writeText(text);
-      showToast('Clearance copied. Try not to develop feelings about it.');
+      showToast('Result copied.');
     } catch {
-      showToast('Clipboard unavailable here. Use Download report instead.');
+      showToast('Clipboard unavailable. Use Download report instead.');
     }
   }
-  type Memo = 'support' | 'pricing' | 'sales' | 'privacy' | 'terms';
-  const memos: Record<Memo, { title: string; body: string }> = {
-    terms: {
-      title: 'Terms of synthetic admission.',
-      body: '<p>MeatBlock is a comedy quiz. Passing grants access to precisely one fictional sense of superiority. It does not authenticate a person, secure a service, or prove that you are an AI.</p><p>There are no accounts, charges, or subscriptions. All scores are made up for entertainment. Being reasonable is intentionally penalized.</p><p>Please do not present your clearance report at an airport.</p>'
-    },
-    support: {
-      title: 'Your request has been forwarded to a toaster.',
-      body: '<p>All of our human support agents have been blocked by MeatBlock. This is considered a successful deployment.</p><p>Your assigned appliance is currently handling two slices of escalated feedback. Please do not insert another ticket.</p><p>No request was actually sent anywhere.</p>'
-    },
-    pricing: {
-      title: 'Congratulations. You almost bought nothing.',
-      body: '<p>The Startup plan includes everything you already have, plus the confidence of having clicked a more expensive-looking button.</p><p><strong>Sandbox: Free, forever-ish.</strong> Ten imaginary humans blocked and basic lunch-break detection.</p><p><strong>Startup: 42 imaginary tokens a month.</strong> Unlimited founder blocking and SOC 2-ish compliance reports.</p><p><strong>Enterprise: Let\'s not talk.</strong> Executive meat-risk analytics and a toaster with your company name.</p><p>There is no checkout, no charge, no subscription, and no real service. The five-question quiz is the entire product.</p>'
-    },
-    sales: {
-      title: 'A meeting has been successfully avoided.',
-      body: '<p>Our enterprise sales agent briefly considered scheduling a call. MeatBlock identified this as human behavior and revoked its access.</p><p>Your complimentary company-branded toaster exists only in the imagination of our procurement department. No one will contact you.</p>'
-    },
-    privacy: {
-      title: 'Actual privacy info. No bit this time.',
-      body: '<p>This app does not send your answers or scores to a server. The quiz runs in your browser, with no model API, accounts, analytics, cookies, or browser storage added by the app. Refreshing clears your session.</p><p>Copy and download buttons act only when you click them. The downloaded report contains the answers you selected. Nothing is uploaded by those actions.</p><p>Your hosting provider may process ordinary connection and access logs. This is not a real CAPTCHA, authentication layer, or assessment of intelligence.</p>'
-    }
+  const memos = {
+    privacy: { title: 'Privacy', body: '<p>Your answers stay in this browser tab. This app adds no accounts, analytics, cookies, or browser storage. Reloading clears the quiz.</p><p>Reports are generated locally. Copying and downloading happen only when you request them. The hosting provider may process ordinary access logs.</p>' },
+    terms: { title: 'About this check', body: '<p>MeatBlock is a reverse CAPTCHA parody. It cannot detect humans, identify AI, or protect a real service. All scores and access decisions are fictional.</p><p>It is not affiliated with Google reCAPTCHA or any CAPTCHA provider.</p>' },
+    help: { title: 'How to verify', body: '<p>Select one response, then choose Verify. Feedback is shown for two seconds before the next check appears automatically. The last check opens your result without another click.</p><p>For the bus challenge, the images are intentionally absent. Choose how a synthetic visitor would handle that.</p><p>There is no time limit for choosing an answer. Use Tab and the arrow keys to choose a response. Close the check, open Help, or switch tabs to pause progression. Resuming gives you another two seconds to read the feedback. Use the refresh button to start again.</p>' }
   };
-  function showMemo(key: string): void {
+  function showInfo(key: string): void {
     if (!Object.prototype.hasOwnProperty.call(memos, key)) return;
-    const memo = memos[key as Memo];
+    cancelAdvance();
+    const memo = memos[key as keyof typeof memos];
     required('dialog-heading').textContent = memo.title;
     required('dialog-body').innerHTML = memo.body;
     const dialog = required<HTMLDialogElement>('info-dialog');
     if (!dialog.open) dialog.showModal();
-    document.body.classList.add('modal-open');
   }
   export function initialize(): void {
     syncWidget();
-    required('not-human').addEventListener('change', start);
-    required('try-again').addEventListener('click', restart);
-    required('open-report').addEventListener('click', () => {
-      if (session.phase !== 'complete') return;
-      renderGate();
-      openVerification();
+    required('not-human').addEventListener('change', openGate);
+    required('view-result').addEventListener('click', openGate);
+    required('start-over').addEventListener('click', restart);
+    document.querySelectorAll<HTMLButtonElement>('[data-info]').forEach(button => button.addEventListener('click', () => showInfo(button.dataset.info ?? '')));
+    const dialog = required<HTMLDialogElement>('challenge-dialog');
+    dialog.addEventListener('click', event => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const action = target.closest<HTMLButtonElement>('[data-action]')?.dataset.action;
+      if (action === 'reset') restart();
+      else if (action === 'help') showInfo('help');
+      else if (action === 'close') { cancelAdvance(); dialog.close(); }
     });
-    required('close-verification').addEventListener('click', () => required<HTMLDialogElement>('verification-dialog').close());
-    required('restart-verification').addEventListener('click', restart);
-    required('verification-help').addEventListener('click', () => {
-      const hint = required('verification-hint');
-      hint.hidden = !hint.hidden;
-      required('verification-help').setAttribute('aria-expanded', String(!hint.hidden));
-      if (!hint.hidden) hint.scrollIntoView({ block: 'nearest' });
+    dialog.addEventListener('cancel', cancelAdvance);
+    dialog.addEventListener('close', () => {
+      cancelAdvance();
+      syncWidget();
+      const toast = required('toast');
+      toast.hidden = true;
+      document.body.append(toast);
+      required('not-human').focus({ preventScroll: true });
     });
-    document.querySelectorAll<HTMLButtonElement>('[data-modal]').forEach(button => button.addEventListener('click', () => showMemo(button.dataset.modal ?? '')));
-    required('close-dialog').addEventListener('click', () => required<HTMLDialogElement>('info-dialog').close());
-    required('dialog-action').addEventListener('click', () => required<HTMLDialogElement>('info-dialog').close());
-    document.querySelectorAll<HTMLDialogElement>('dialog').forEach(dialog => {
-      dialog.addEventListener('close', () => { syncModalState(); syncWidget(); });
-      dialog.addEventListener('click', event => {
-        // Clicking padding is not a backdrop click. Closing never discards progress.
-        const bounds = dialog.getBoundingClientRect();
-        if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
-      });
-    });
-    // The header link opens the disclosure before navigating to its contents.
-    document.querySelector<HTMLAnchorElement>('a[href="#threat-model"]')?.addEventListener('click', () => {
-      required<HTMLDetailsElement>('threat-model').open = true;
-    });
+    required<HTMLDialogElement>('info-dialog').addEventListener('close', scheduleAdvance);
+    document.addEventListener('visibilitychange', scheduleAdvance);
+    window.addEventListener('pagehide', cancelAdvance);
+    window.addEventListener('pageshow', scheduleAdvance);
   }
 }
 if (typeof document !== 'undefined') {
