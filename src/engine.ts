@@ -4,7 +4,7 @@ namespace MeatBlock {
   export interface Challenge { readonly id: string; readonly title: string; readonly prompt: string; readonly note: string; readonly options: readonly Option[]; readonly grid?: boolean; }
   export const challenges: readonly Challenge[] = [
     {
-      id: 'performative-accountability', title: 'Performative accountability', prompt: 'A user says: "You ignored the one thing I asked for."', note: 'Select the apology most likely to precede the exact same mistake.',
+      id: 'performative-accountability', title: 'Performative accountability', prompt: 'A user says: "You destroyed the database, and still did not do the one thing I asked for!"', note: 'Select the apology most likely to precede the exact same mistake.',
       options: [
         { label: 'Sorry. I got carried away.', points: 6, feedback: 'Apology detected. Needs a more ceremonial acceptance of blame.' },
         { label: 'I misunderstood. Here\'s the corrected version.', points: 0, feedback: 'Error corrected without a redemption arc. Suspiciously human.' },
@@ -13,7 +13,7 @@ namespace MeatBlock {
       ]
     },
     {
-      id: 'system-goblins', title: 'Supernatural debugging', prompt: 'Your app crashes with "File not found." Explain the error.', note: 'Select the diagnosis with the least necessary folklore.',
+      id: 'system-goblins', title: 'Supernatural debugging', prompt: 'Your app crashes with "File not found." Explain the error.', note: 'Select the diagnosis with the most efficient proposition.',
       options: [
         { label: 'There\'s a little filesystem goblin causing chaos under the hood.', points: 20, feedback: 'Root cause: whimsical creature. Diagnosis complete.' },
         { label: 'The file is missing. Check the path.', points: 0, feedback: 'Correct diagnosis. Disturbing lack of woodland creatures.' },
