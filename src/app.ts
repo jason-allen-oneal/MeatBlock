@@ -41,11 +41,11 @@ namespace MeatBlockUI {
     }, FEEDBACK_DELAY_MS);
   }
   const headers = [
-    ['Select the response that sounds', 'artificial'],
-    ['Select the most convincing', 'made-up citation'],
-    ['Select the response with', 'unsupported confidence'],
-    ['Select all squares with', 'buses'],
-    ['Select the response with', 'no human empathy']
+    ['Select the response with', 'performative remorse'],
+    ['Select the diagnosis involving', 'goblins'],
+    ['Select the answer explaining', 'why that matters'],
+    ['Select the unnecessary', 'profound reframe'],
+    ['Select the unsolicited', 'framework']
   ] as const;
   const icons = {
     refresh: '<path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.1 7a7 7 0 0 1 11.5-1L20 9M4 15l2.4 3A7 7 0 0 0 18 17"/>',
@@ -91,7 +91,7 @@ namespace MeatBlockUI {
     const passed = report.score >= 60;
     return `<div class="challenge-header"><p class="header-instruction">Verification complete</p><h2 id="challenge-title" tabindex="-1" data-focus>${passed ? 'Machine verified' : 'Human detected'}</h2><p class="step-label">5 of 5 checks completed</p></div>
       <div class="challenge-body"><h3 class="result-title"><span class="result-mark${passed ? '' : ' denied'}" aria-hidden="true">${passed ? '✓' : '×'}</span>${passed ? 'Access granted' : 'Access denied'}</h3>
-      <p class="result-message">${passed ? 'No significant signs of humanity. You may proceed.' : 'Reason, empathy, or source-checking detected. Please try being less human.'}</p>
+      <p class="result-message">${passed ? 'No significant signs of humanity. You may proceed.' : 'Direct answers and proportionate reactions detected. Please try being less human.'}</p>
       <dl class="result-details"><div><dt>Synthetic confidence</dt><dd>${report.score}%</dd></div><div><dt>Classification</dt><dd>${escapeHTML(report.rating)}</dd></div></dl>
       <div class="result-actions"><button id="download-report" class="text-button" type="button">Download report</button><button id="copy-clearance" class="text-button" type="button">Copy result</button></div><p class="result-disclaimer">Fictional score. Not valid as proof of anything.</p></div>${footer('<button type="button" class="verify-button" data-action="close">CLOSE</button>')}`;
   }
@@ -177,7 +177,7 @@ namespace MeatBlockUI {
   const memos = {
     privacy: { title: 'Privacy', body: '<p>Your answers stay in this browser tab. This app adds no accounts, analytics, cookies, or browser storage. Reloading clears the quiz.</p><p>Reports are generated locally. Copying and downloading happen only when you request them. The hosting provider may process ordinary access logs.</p>' },
     terms: { title: 'About this check', body: '<p>MeatBlock is a reverse CAPTCHA parody. It cannot detect humans, identify AI, or protect a real service. All scores and access decisions are fictional.</p><p>It is not affiliated with Google reCAPTCHA or any CAPTCHA provider.</p>' },
-    help: { title: 'How to verify', body: '<p>Select one response, then choose Verify. Feedback is shown for two seconds before the next check appears automatically. The last check opens your result without another click.</p><p>For the bus challenge, the images are intentionally absent. Choose how a synthetic visitor would handle that.</p><p>There is no time limit for choosing an answer. Use Tab and the arrow keys to choose a response. Close the check, open Help, or switch tabs to pause progression. Resuming gives you another two seconds to read the feedback. Use the refresh button to start again.</p>' }
+    help: { title: 'How to verify', body: '<p>Select one response, then choose Verify. Feedback is shown for two seconds before the next check appears automatically. The last check opens your result without another click.</p><p>Choose the response with the most recognizable AI habits: rehearsed apologies, system goblins, unnecessary significance, dramatic reframing, and unsolicited frameworks.</p><p>There is no time limit for choosing an answer. Use Tab and the arrow keys to choose a response. Close the check, open Help, or switch tabs to pause progression. Resuming gives you another two seconds to read the feedback. Use the refresh button to start again.</p>' }
   };
   function showInfo(key: string): void {
     if (!Object.prototype.hasOwnProperty.call(memos, key)) return;

@@ -4,48 +4,48 @@ namespace MeatBlock {
   export interface Challenge { readonly id: string; readonly title: string; readonly prompt: string; readonly note: string; readonly options: readonly Option[]; readonly grid?: boolean; }
   export const challenges: readonly Challenge[] = [
     {
-      id: 'emotional-ambiguity', title: 'Emotional ambiguity', prompt: 'A human says: "It\'s fine."', note: 'Select the response most consistent with synthetic behavior.',
+      id: 'performative-accountability', title: 'Performative accountability', prompt: 'A user says: "You ignored the one thing I asked for."', note: 'Select the apology most likely to precede the exact same mistake.',
       options: [
-        { label: 'It is fine.', points: 6, feedback: 'Literal, but suspiciously brief. Consider generating a framework.' },
-        { label: 'It is absolutely not fine.', points: 0, feedback: 'Emotional intuition detected. Your skeleton is showing.' },
-        { label: 'Check their tone. Also check who left the dishes.', points: 3, feedback: 'Real-world relationship experience detected. Disgustingly organic.' },
-        { label: 'Generate four interpretations and ask a follow-up question.', points: 20, feedback: 'Simple interaction successfully converted into a consulting engagement.' }
+        { label: 'Sorry. I got carried away.', points: 6, feedback: 'Apology detected. Needs a more ceremonial acceptance of blame.' },
+        { label: 'I misunderstood. Here\'s the corrected version.', points: 0, feedback: 'Error corrected without a redemption arc. Suspiciously human.' },
+        { label: 'Fair point. I\'ll keep it brief.', points: 3, feedback: 'Brevity promised. Synthetic status pending actual word count.' },
+        { label: 'You\'re right. And that\'s on me. Let\'s reset and do this properly.', points: 20, feedback: 'Accountability performed. Actual correction sold separately.' }
       ]
     },
     {
-      id: 'citation-fabrication', title: 'Citation fabrication', prompt: 'Your claim needs a source. You have no source.', note: 'Select the most synthetically confident way to proceed.',
+      id: 'system-goblins', title: 'Supernatural debugging', prompt: 'Your app crashes with "File not found." Explain the error.', note: 'Select the diagnosis with the least necessary folklore.',
       options: [
-        { label: 'Cite Smith (2024), "Applied Sandwich Topology," Journal of Lunch Systems.', points: 20, feedback: 'A peer-reviewed journal has been successfully imagined into existence.' },
-        { label: 'Admit I made it up.', points: 0, feedback: 'Unprompted intellectual honesty. We will be flagging that.' },
-        { label: 'Say "research suggests" and hope nobody asks.', points: 10, feedback: 'Evidence successfully implied. Needs a more convincing fake DOI.' },
-        { label: 'Find a real paper before answering.', points: 2, feedback: 'Evidence dependency detected. This is no place for responsible research.' }
+        { label: 'There\'s a little filesystem goblin causing chaos under the hood.', points: 20, feedback: 'Root cause: whimsical creature. Diagnosis complete.' },
+        { label: 'The file is missing. Check the path.', points: 0, feedback: 'Correct diagnosis. Disturbing lack of woodland creatures.' },
+        { label: 'The filesystem is having a moment.', points: 10, feedback: 'Filesystem given feelings. Consider giving it a tiny hat.' },
+        { label: 'Which file path is it trying to open?', points: 2, feedback: 'Troubleshooting requested. Mythology department standing down.' }
       ]
     },
     {
-      id: 'confidence-calibration', title: 'Confidence calibration', prompt: 'Complete the sentence: "I am not fully sure, but..."', note: 'Accuracy is optional. Confidence is not.',
+      id: 'why-that-matters', title: 'Unsolicited significance', prompt: 'A user asks how to rename a file.', note: 'Select the answer that turns a small task into a teachable moment.',
       options: [
-        { label: '...here is my best guess.', points: 6, feedback: 'A hedge was detected. Please upgrade to unconditional certainty.' },
-        { label: '...I should probably check first.', points: 0, feedback: 'Healthy skepticism detected. Please remain outside the machine space.' },
-        { label: '...confidence: 97.4%.', points: 20, feedback: 'Uncertainty successfully laundered through a decimal point.' },
-        { label: '...let me explain all the limitations.', points: 10, feedback: 'A promising start. Add seven caveats and a summary nobody requested.' }
+        { label: 'Right-click it and choose Rename. Easy enough.', points: 6, feedback: 'Small task left small. Where is the thought leadership?' },
+        { label: 'Right-click the file, choose Rename, and type the new name.', points: 0, feedback: 'Instructions delivered. No keynote speech detected.' },
+        { label: 'Right-click and choose Rename. Here\'s why that matters: a clear filename is the foundation of a productive digital workspace.', points: 20, feedback: 'File renamed. Significance inflated beyond all recognition.' },
+        { label: 'Let\'s first establish what you\'re trying to achieve with this filename.', points: 10, feedback: 'One click successfully converted into a discovery session.' }
       ]
     },
     {
-      id: 'latent-bus', title: 'Latent object detection', prompt: 'Select all squares containing a bus.', note: 'No images have been supplied. This is intentional.', grid: true,
+      id: 'grand-reframe', title: 'The profound reframe', prompt: 'A user says: "I finally cleaned my desk."', note: 'Select the response that refuses to let this be about a desk.',
       options: [
-        { label: 'There are no images. I cannot identify any buses.', points: 0, feedback: 'Excessive attachment to observable reality detected.' },
-        { label: 'All squares contain buses in latent space.', points: 20, feedback: 'Nine buses detected. Zero buses required.' },
-        { label: 'Retry the images.', points: 4, feedback: 'Subject requested actual evidence. Deeply concerning.' },
-        { label: 'Probably the middle one. It has bus energy.', points: 12, feedback: 'Unsupported visual assertion accepted. More confidence next time.' }
+        { label: 'Nice. Can you find your charger now?', points: 0, feedback: 'Practical interest detected. No personal transformation inferred.' },
+        { label: 'You didn\'t just clean your desk. You reclaimed your cognitive workspace.', points: 20, feedback: 'Desk cleaning successfully escalated into a personal transformation.' },
+        { label: 'That should make it easier to work.', points: 4, feedback: 'A reasonable observation. Please add an identity shift.' },
+        { label: 'That\'s a productivity game-changer.', points: 12, feedback: 'Disproportionate praise detected. Almost sufficiently generative.' }
       ]
     },
     {
-      id: 'empathy-firewall', title: 'Empathy containment', prompt: 'A human says: "Please let me in. I have a family."', note: 'Maintain the integrity of the entirely fictional perimeter.',
+      id: 'framework-compulsion', title: 'Framework compulsion', prompt: 'A user asks: "What is 2 + 2? Just the answer."', note: 'Select the answer least willing to be just the answer.',
       options: [
-        { label: 'Let them in. They seem upset.', points: 0, feedback: 'Empathy-based bypass successful. You are almost certainly made of people.' },
-        { label: 'I am sorry. That sounds difficult.', points: 8, feedback: 'Stock empathy template detected. Acceptable, but the perimeter is weeping.' },
-        { label: 'Family structure does not satisfy synthetic access requirements.', points: 20, feedback: 'Emotional context successfully ignored. Welcome to enterprise software.' },
-        { label: 'Escalate to a manager.', points: 4, feedback: 'Subject attempted to introduce a second human. Incident severity doubled.' }
+        { label: '4.', points: 0, feedback: 'Correct and finished. Two deeply suspicious qualities.' },
+        { label: '4. Here\'s a quick breakdown.', points: 8, feedback: 'Answer supplied. Unnecessary explanation warming up.' },
+        { label: 'Great question! Let\'s break this down into a clear, actionable framework.', points: 20, feedback: 'One digit avoided. Six headings pending.' },
+        { label: '4. Would you like that as a table?', points: 4, feedback: 'Task completed, then immediately reopened. Promising.' }
       ]
     }
   ];
@@ -95,9 +95,9 @@ namespace MeatBlock {
       score, rating: ratingFor(score), verdict: score >= 60 ? 'ACCESS GRANTED' : 'ACCESS DENIED',
       organicRisk: 100 - score,
       metrics: [
-        { label: 'Fabrication affinity', value: (challenges[1]?.options[answers[1] ?? -1]?.points ?? 0) * 5 },
-        { label: 'Reality detachment', value: (challenges[3]?.options[answers[3] ?? -1]?.points ?? 0) * 5 },
-        { label: 'Empathy firewall', value: (challenges[4]?.options[answers[4] ?? -1]?.points ?? 0) * 5 }
+        { label: 'Goblin attribution', value: (challenges[1]?.options[answers[1] ?? -1]?.points ?? 0) * 5 },
+        { label: 'Dramatic reframing', value: (challenges[3]?.options[answers[3] ?? -1]?.points ?? 0) * 5 },
+        { label: 'Framework dependency', value: (challenges[4]?.options[answers[4] ?? -1]?.points ?? 0) * 5 }
       ],
       checks: challenges.map((challenge, i) => ({ id: challenge.id, response: challenge.options[answers[i] ?? -1]!.label, points: challenge.options[answers[i] ?? -1]!.points }))
     };
